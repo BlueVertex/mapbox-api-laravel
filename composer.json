@@ -1,0 +1,36 @@
+{
+    "name": "bluevertex/mapbox-api-laravel",
+    "description": "A Laravel 5+ Package for managing Mapbox Datasets and Tilesets",
+    "type": "library",
+    "require": {
+        "php": ">=7.0.0",
+        "illuminate/contracts": "^5.5",
+        "illuminate/support": "^5.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matt Fox",
+            "email": "matt.fox@thebluevertex.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "BlueVertex\\MapBoxAPILaravel\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BlueVertex\\MapBoxAPILaravel\\MapBoxAPILaravelServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "^6.5"
+    }
+}
