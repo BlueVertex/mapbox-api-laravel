@@ -47,7 +47,7 @@ class Mapbox
         return $this;
     }
 
-    protected function getUrl($type, $id = null)
+    protected function getUrl($type, $id = null, $options = [])
     {
         $parts = [
             $this->mconfig['api_url'],
@@ -59,6 +59,11 @@ class Mapbox
         if ($id != null)
         {
             $parts[] = $id;
+        }
+
+        if (!empty($options))
+        {
+            $parts = array_merge($parts, $options);
         }
 
         return ($this->mconfig['use_ssl'] ? 'https://' : 'http://') . implode('/', $parts) . '?access_token=' . $this->mconfig['access_token'];
@@ -102,5 +107,17 @@ class Mapbox
     public function delete($id)
     {
         return Zttp::delete($this->getUrl($this->currentType, $id));
+    }
+
+    public function listFeatures($id)
+    {
+        if ($this->currentType !== Mapbox::DATASET)
+        {
+            throw new RunTimeException('Features only work with Datasets');
+        }
+
+        $response = Zttp::get($this->getUrl($this->currentType, $id, ['features']));
+
+        return $response->json();
     }
 }

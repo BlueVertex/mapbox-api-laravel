@@ -9,6 +9,8 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 */
 class TestCase extends OrchestraTestCase
 {
+    protected $testDataset;
+
     protected function getPackageProviders($app)
     {
         return ['BlueVertex\MapBoxAPILaravel\MapBoxAPILaravelServiceProvider'];
@@ -28,11 +30,13 @@ class TestCase extends OrchestraTestCase
         }
 
         $app['config']->set('mapbox', [
-            'api_url'      => 'api.mapbox.com',
-            'api_version'  => 'v1',
-            'use_ssl'      => true,
-            'username'     => getenv('MAPBOX_USERNAME'),
-            'access_token' => getenv('MAPBOX_ACCESS_TOKEN')
+            'api_url'         => 'api.mapbox.com',
+            'api_version'     => 'v1',
+            'use_ssl'         => true,
+            'username'        => getenv('MAPBOX_USERNAME'),
+            'access_token'    => getenv('MAPBOX_ACCESS_TOKEN')
         ]);
+
+        $this->testDataset = getenv('MAPBOX_TEST_DATASET_ID');
     }
 }
