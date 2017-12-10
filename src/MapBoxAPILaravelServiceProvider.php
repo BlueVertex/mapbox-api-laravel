@@ -3,22 +3,35 @@
 namespace BlueVertex\MapBoxAPILaravel;
 
 use Illuminate\Support\ServiceProvider;
+use BlueVertex\MapBoxAPILaravel\Mapbox;
 
 class MapBoxAPILaravelServiceProvider extends ServiceProvider {
 
     public function boot() {
 
+        $this->publishes([
+            __DIR__.'/config/config.php' => config_path('mapbox.php'),
+        ]);
     }
 
     public function register() {
 
-        // $this->app->bind(
-        //     'BlueVertex\EMRBridge\Contracts\ResourceQuery',
-        //     getenv('EMR_API_MODULE')
-        // );
+        $this->mergeConfigFrom(
+            __DIR__.'/config/config.php', 'mapbox'
+        );
 
-        // $this->app->bind('emrbridge.resource', function () {
-        //     return new \BlueVertex\EMRBridge\Resource\Resource;
-        // });
+        $this->app->singleton(Mapbox::class, function ($app) {
+            return new Mapbox($app['config']);
+        });
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return ['mapbox'];
     }
 }

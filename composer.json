@@ -5,7 +5,8 @@
     "require": {
         "php": ">=7.0.0",
         "illuminate/contracts": "^5.5",
-        "illuminate/support": "^5.5"
+        "illuminate/support": "^5.5",
+        "kitetail/zttp": "^0.3.0"
     },
     "license": "MIT",
     "authors": [
@@ -19,6 +20,11 @@
             "BlueVertex\\MapBoxAPILaravel\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "BlueVertex\\MapBoxAPILaravel\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -29,8 +35,11 @@
             }
         }
     },
+    "scripts": {
+        "test": "phpunit"
+    },
     "require-dev": {
-        "orchestra/testbench": "~3.0",
+        "orchestra/testbench": "~3.5",
         "phpunit/phpunit": "^6.5"
     }
 }
