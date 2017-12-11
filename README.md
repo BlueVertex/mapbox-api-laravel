@@ -1,6 +1,10 @@
 # Mapbox API for Laravel 5+
 
 [![Build Status](https://travis-ci.org/BlueVertex/mapbox-api-laravel.svg)](https://travis-ci.org/BlueVertex/mapbox-api-laravel)
+[![Latest Stable Version](https://poser.pugx.org/bluevertex/mapbox-api-laravel/v/stable)](https://packagist.org/packages/bluevertex/mapbox-api-laravel)
+[![Latest Unstable Version](https://poser.pugx.org/bluevertex/mapbox-api-laravel/v/unstable)](https://packagist.org/packages/bluevertex/mapbox-api-laravel)
+[![Monthly Downloads](https://poser.pugx.org/bluevertex/mapbox-api-laravel/d/monthly)](https://packagist.org/packages/bluevertex/mapbox-api-laravel)
+[![License](https://poser.pugx.org/bluevertex/mapbox-api-laravel/license)](https://packagist.org/packages/bluevertex/mapbox-api-laravel)
 
 A [Laravel](https://laravel.com/) 5+ Package for managing [Mapbox](https://www.mapbox.com/api-documentation/) Datasets and Tilesets
 
@@ -28,7 +32,7 @@ BlueVertex\MapBoxAPILaravel\MapBoxAPILaravelServiceProvider::class
 ```
 
 ```
-// Lumen: bootstrap/app.php 
+// Lumen: bootstrap/app.php
 $app->register(BlueVertex\MapBoxAPILaravel\MapBoxAPILaravelServiceProvider::class);
 ```
 
@@ -46,7 +50,7 @@ MAPBOX_ACCESS_TOKEN=[Your Mapbox Access Token]
 MAPBOX_USERNAME=[Your Mapbox Username]
 ```
 
-*Note: Make sure your Access Token has the proper scope for all the operations you need to perform.* 
+*Note: Make sure your Access Token has the proper scope for all the operations you need to perform.*
 
 ## Usage
 
