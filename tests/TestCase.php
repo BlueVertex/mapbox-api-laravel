@@ -10,6 +10,7 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 class TestCase extends OrchestraTestCase
 {
     protected $testDataset;
+    protected $testUsername;
 
     protected function getPackageProviders($app)
     {
@@ -37,6 +38,7 @@ class TestCase extends OrchestraTestCase
             'access_token'    => getenv('MAPBOX_ACCESS_TOKEN')
         ]);
 
+        $this->testUsername = getenv('MAPBOX_USERNAME');
         $this->testDataset = getenv('MAPBOX_TEST_DATASET_ID');
     }
 }

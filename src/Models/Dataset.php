@@ -2,7 +2,7 @@
 
 namespace BlueVertex\MapBoxAPILaravel\Models;
 
-class Dataset implements JsonSerializable
+class Dataset extends JSONModel
 {
     public $owner;
     public $id;

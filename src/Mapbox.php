@@ -6,6 +6,7 @@ use Illuminate\Config\Repository as Config;
 use Zttp\Zttp;
 use Zttp\ZttpResponse;
 use \BlueVertex\MapBoxAPILaravel\MapboxFeatures;
+use \BlueVertex\MapBoxAPILaravel\Models\S3Credentials;
 
 class Mapbox
 {
@@ -14,6 +15,7 @@ class Mapbox
      */
     const DATASET = 'datasets';
     const TILESET = 'tilesets';
+    const UPLOAD  = 'uploads';
 
     /**
      * Config Values
@@ -72,6 +74,11 @@ class Mapbox
         return ($this->mconfig['use_ssl'] ? 'https://' : 'http://') . implode('/', $parts) . '?access_token=' . $this->mconfig['access_token'];
     }
 
+    /**
+     * Set API to work with Datasets
+     * @param  string $id    Optional
+     * @return Mapbox Class
+     */
     public function datasets($id = null)
     {
         $this->currentType = Mapbox::DATASET;
@@ -80,9 +87,40 @@ class Mapbox
         return $this;
     }
 
-    public function list()
+    /**
+     * Set API to work with Tilesets
+     * @param  string $id    Optional
+     * @return Mapbox Class
+     */
+    public function tilesets($id = null)
     {
-        $response = Zttp::get($this->getUrl($this->currentType));
+        $this->currentType = Mapbox::TILESET;
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set API to work with Uploads
+     * @param  string $id    Optional
+     * @return Mapbox Class
+     */
+    public function uploads($id = null)
+    {
+        $this->currentType = Mapbox::UPLOAD;
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function list($options = [])
+    {
+        if (count($options) && $this->currentType == Mapbox::DATASET)
+        {
+            throw new RunTimeException('Dataset listing does not support parameters');
+        }
+
+        $response = Zttp::get($this->getUrl($this->currentType), $options);
 
         return $response->json();
     }
@@ -141,5 +179,20 @@ class Mapbox
         }
 
         return new MapboxFeatures($this->id, $featureID);
+    }
+
+    /**
+     * Get Temporary S3 Credentials (UPLOADS ONLY)
+     */
+    public function credentials()
+    {
+        if ($this->currentType !== Mapbox::UPLOAD)
+        {
+            throw new RunTimeException('Credentials only work with Uploads');
+        }
+
+        $response = Zttp::get($this->getUrl($this->currentType, null, ['credentials']));
+
+        return new S3Credentials($response->json());
     }
 }
