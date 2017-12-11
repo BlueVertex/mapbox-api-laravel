@@ -1,5 +1,7 @@
 # Mapbox API for Laravel 5+
 
+[![Build Status](https://travis-ci.org/BlueVertex/mapbox-api-laravel.svg)](https://travis-ci.org/BlueVertex/mapbox-api-laravel)
+
 A [Laravel](https://laravel.com/) 5+ Package for managing [Mapbox](https://www.mapbox.com/api-documentation/) Datasets and Tilesets
 
 This library supports the listing, creation, and deletion of the following types via the Mapbox API:
@@ -38,7 +40,7 @@ MAPBOX_USERNAME=[Your Mapbox Username]
 **List Datasets:**
 
 ```
-$list = Mapbox::datasets();
+$list = Mapbox::datasets()->list();
 ```
 
 **Create Dataset:**
@@ -53,13 +55,13 @@ $dataset = Mapbox::datasets()->create([
 **Retrieve Dataset**
 
 ```
-$dataset = Mapbox::datasets()->get($datasetID);
+$dataset = Mapbox::datasets($datasetID)->get();
 ```
 
 **Update Dataset**
 
 ```
-$dataset = Mapbox::datasets()->update($datasetID, [
+$dataset = Mapbox::datasets($datasetID)->update([
 	'name' => 'My Dataset Updated',
 	'description' => 'This is my latest dataset'
 ]);
@@ -68,6 +70,30 @@ $dataset = Mapbox::datasets()->update($datasetID, [
 **Delete Dataset**
 
 ```
-$response = Mapbox::datasets()->delete($datasetID);
+$response = Mapbox::datasets($datasetID)->delete();
+```
+
+**List Feature**
+
+```
+$response = Mapbox::datasets($datasetID)->features()->list();
+```
+
+**Insert or Update Feature**
+
+```
+$response = Mapbox::datasets($datasetID)->features()->add($feature);
+```
+
+**Retrieve Feature**
+
+```
+$response = Mapbox::datasets($datasetID)->features($featureID)->get();
+```
+
+**Delete Feature**
+
+```
+$response = Mapbox::datasets($datasetID)->features($featureID)->delete();
 ```
 

@@ -5,6 +5,7 @@ namespace BlueVertex\MapBoxAPILaravel;
 use Illuminate\Config\Repository as Config;
 use Zttp\Zttp;
 use Zttp\ZttpResponse;
+use \BlueVertex\MapBoxAPILaravel\MapboxFeatures;
 
 class Mapbox
 {
@@ -25,6 +26,8 @@ class Mapbox
      * @var string
      */
     private $currentType;
+
+    private $id;
 
     public function __construct(Config $config)
     {
@@ -47,7 +50,7 @@ class Mapbox
         return $this;
     }
 
-    protected function getUrl($type, $id = null, $options = [])
+    public function getUrl($type, $id = null, $options = [])
     {
         $parts = [
             $this->mconfig['api_url'],
@@ -69,9 +72,10 @@ class Mapbox
         return ($this->mconfig['use_ssl'] ? 'https://' : 'http://') . implode('/', $parts) . '?access_token=' . $this->mconfig['access_token'];
     }
 
-    public function datasets()
+    public function datasets($id = null)
     {
         $this->currentType = Mapbox::DATASET;
+        $this->id = $id;
 
         return $this;
     }
@@ -90,34 +94,52 @@ class Mapbox
         return $response->json();
     }
 
-    public function get($id)
+    public function get()
     {
-        $response = Zttp::get($this->getUrl($this->currentType, $id));
+        if ($this->id == null)
+        {
+            throw new RunTimeException('Dataset ID Required');
+        }
+
+        $response = Zttp::get($this->getUrl($this->currentType, $this->id));
 
         return $response->json();
     }
 
-    public function update($id, $data)
+    public function update($data)
     {
-        $response = Zttp::patch($this->getUrl($this->currentType, $id), $data);
+        if ($this->id == null)
+        {
+            throw new RunTimeException('Dataset ID Required');
+        }
+
+        $response = Zttp::patch($this->getUrl($this->currentType, $this->id), $data);
 
         return $response->json();
     }
 
-    public function delete($id)
+    public function delete()
     {
-        return Zttp::delete($this->getUrl($this->currentType, $id));
+        if ($this->id == null)
+        {
+            throw new RunTimeException('Dataset ID Required');
+        }
+
+        return Zttp::delete($this->getUrl($this->currentType, $this->id));
     }
 
-    public function listFeatures($id)
+    public function features($featureID = null)
     {
         if ($this->currentType !== Mapbox::DATASET)
         {
             throw new RunTimeException('Features only work with Datasets');
         }
 
-        $response = Zttp::get($this->getUrl($this->currentType, $id, ['features']));
+        if ($this->id == null)
+        {
+            throw new RunTimeException('Dataset ID Required');
+        }
 
-        return $response->json();
+        return new MapboxFeatures($this->id, $featureID);
     }
 }

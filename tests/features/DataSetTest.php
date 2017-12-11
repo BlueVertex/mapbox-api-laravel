@@ -29,12 +29,12 @@ class DataSetTest extends TestCase
         $this->assertArrayHasKey('owner', $response);
 
         // Retrieve Dataset
-        $response = Mapbox::datasets()->get($response['id']);
+        $response = Mapbox::datasets($response['id'])->get();
 
         $this->assertArrayHasKey('owner', $response);
 
         // Update Dataset
-         $response = Mapbox::datasets()->update($response['id'], [
+         $response = Mapbox::datasets($response['id'])->update([
             "name" => "foo2"
         ]);
 
@@ -43,7 +43,7 @@ class DataSetTest extends TestCase
 
 
         // Delete Dataset (clean up)
-        $response = Mapbox::datasets()->delete($response['id']);
+        $response = Mapbox::datasets($response['id'])->delete();
 
         $this->assertEquals(204, $response->status());
     }
