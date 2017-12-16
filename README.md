@@ -25,21 +25,27 @@ composer require bluevertex/mapbox-api-laravel
 
 The service provider should be automatically registered.
 
-**Laravel ≤ 5.4 and Lumen:**
+**Laravel ≤ 5.4:**
 ```
 // Laravel: config/app.php
 BlueVertex\MapBoxAPILaravel\MapBoxAPILaravelServiceProvider::class
 ```
 
 ```
-// Lumen: bootstrap/app.php
-$app->register(BlueVertex\MapBoxAPILaravel\MapBoxAPILaravelServiceProvider::class);
-```
-
-```
 // Facade Alias
 'Mapbox' => BlueVertex\MapBoxAPILaravel\Facades\Mapbox::class,
 ```
+
+**Lumen:**
+```
+// bootstrap/app.php:
+$app->register(BlueVertex\MapBoxAPILaravel\MapBoxAPILaravelServiceProvider::class);
+
+$app->withFacades(true, [
+    'BlueVertex\MapBoxAPILaravel\Facades\Mapbox' => 'Mapbox'
+]);
+```
+
 
 ## Configuration
 

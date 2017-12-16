@@ -9,9 +9,11 @@ class MapBoxAPILaravelServiceProvider extends ServiceProvider {
 
     public function boot() {
 
-        $this->publishes([
-            __DIR__.'/config/config.php' => config_path('mapbox.php'),
-        ]);
+        if (function_exists('config_path')) {
+            $this->publishes([
+                __DIR__.'/config/config.php' => config_path('mapbox.php'),
+            ]);
+        }
     }
 
     public function register() {

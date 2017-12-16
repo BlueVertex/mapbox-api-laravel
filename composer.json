@@ -32,7 +32,7 @@
                 "BlueVertex\\MapBoxAPILaravel\\MapBoxAPILaravelServiceProvider"
             ],
             "aliases": {
-
+                "Mapbox": "BlueVertex\\MapBoxAPILaravel\\Facades\\Mapbox"
             }
         }
     },
