@@ -2,6 +2,7 @@
 
 namespace BlueVertex\MapBoxAPILaravel;
 
+use RunTimeException;
 use Illuminate\Config\Repository as Config;
 use Zttp\Zttp;
 use Zttp\ZttpResponse;
