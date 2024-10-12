@@ -1,12 +1,11 @@
 {
     "name": "bluevertex/mapbox-api-laravel",
-    "description": "A Laravel 5+ Package for managing Mapbox Datasets and Tilesets",
+    "description": "A Laravel 11+ Package for managing Mapbox Datasets and Tilesets",
     "type": "library",
     "require": {
-        "php": ">=7.0.0",
-        "illuminate/contracts": "^5.5",
-        "illuminate/support": "^5.5",
-        "kitetail/zttp": "^0.3.0",
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0",
+        "illuminate/support": "^11.0",
         "jmikola/geojson": "^1.0"
     },
     "license": "MIT",
@@ -23,7 +22,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "BlueVertex\\MapBoxAPILaravel\\Tests\\": "tests/"
+            "BlueVertex\\MapBoxAPILaravel\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "extra": {
@@ -37,11 +39,25 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": [
+            "@php vendor/bin/phpstan analyse --verbose --ansi"
+        ]
     },
     "require-dev": {
-        "orchestra/testbench": "~3.5",
-        "phpunit/phpunit": "^6.5",
-        "codedungeon/phpunit-result-printer": "^0.4.4"
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^10.5"
     }
 }

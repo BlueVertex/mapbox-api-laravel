@@ -4,19 +4,18 @@ namespace BlueVertex\MapBoxAPILaravel;
 
 use RunTimeException;
 use Illuminate\Config\Repository as Config;
-use Zttp\Zttp;
-use Zttp\ZttpResponse;
-use \BlueVertex\MapBoxAPILaravel\MapboxFeatures;
-use \BlueVertex\MapBoxAPILaravel\Models\S3Credentials;
+use Illuminate\Support\Facades\Http;
+use BlueVertex\MapBoxAPILaravel\MapboxFeatures;
+use BlueVertex\MapBoxAPILaravel\Models\S3Credentials;
 
 class Mapbox
 {
     /**
      * Request Types
      */
-    const DATASET = 'datasets';
-    const TILESET = 'tilesets';
-    const UPLOAD  = 'uploads';
+    public const DATASET = 'datasets';
+    public const TILESET = 'tilesets';
+    public const UPLOAD  = 'uploads';
 
     /**
      * Config Values
@@ -34,16 +33,11 @@ class Mapbox
 
     public function __construct(Config $config)
     {
-        if ($config->has('mapbox::config'))
-        {
+        if ($config->has('mapbox::config')) {
             $this->mconfig = $config->get('mapbox::config');
-        }
-        else if ($config->get('mapbox'))
-        {
+        } elseif ($config->get('mapbox')) {
             $this->mconfig = $config->get('mapbox');
-        }
-        else
-        {
+        } else {
             throw new RunTimeException('No config found');
         }
     }
@@ -62,13 +56,11 @@ class Mapbox
             $this->mconfig['username']
         ];
 
-        if ($id != null)
-        {
+        if ($id != null) {
             $parts[] = $id;
         }
 
-        if (!empty($options))
-        {
+        if (!empty($options)) {
             $parts = array_merge($parts, $options);
         }
 
@@ -116,66 +108,60 @@ class Mapbox
 
     public function list($options = [])
     {
-        if (count($options) && $this->currentType == Mapbox::DATASET)
-        {
+        if (count($options) && $this->currentType == Mapbox::DATASET) {
             throw new RunTimeException('Dataset listing does not support parameters');
         }
 
-        $response = Zttp::get($this->getUrl($this->currentType), $options);
+        $response = Http::get($this->getUrl($this->currentType), $options);
 
         return $response->json();
     }
 
     public function create($data)
     {
-        $response = Zttp::post($this->getUrl($this->currentType), $data);
+        $response = Http::post($this->getUrl($this->currentType), $data);
 
         return $response->json();
     }
 
     public function get()
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             throw new RunTimeException('Dataset ID Required');
         }
 
-        $response = Zttp::get($this->getUrl($this->currentType, $this->id));
+        $response = Http::get($this->getUrl($this->currentType, $this->id));
 
         return $response->json();
     }
 
     public function update($data)
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             throw new RunTimeException('Dataset ID Required');
         }
 
-        $response = Zttp::patch($this->getUrl($this->currentType, $this->id), $data);
+        $response = Http::patch($this->getUrl($this->currentType, $this->id), $data);
 
         return $response->json();
     }
 
     public function delete()
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             throw new RunTimeException('Dataset ID Required');
         }
 
-        return Zttp::delete($this->getUrl($this->currentType, $this->id));
+        return Http::delete($this->getUrl($this->currentType, $this->id));
     }
 
     public function features($featureID = null)
     {
-        if ($this->currentType !== Mapbox::DATASET)
-        {
+        if ($this->currentType !== Mapbox::DATASET) {
             throw new RunTimeException('Features only work with Datasets');
         }
 
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             throw new RunTimeException('Dataset ID Required');
         }
 
@@ -187,12 +173,11 @@ class Mapbox
      */
     public function credentials()
     {
-        if ($this->currentType !== Mapbox::UPLOAD)
-        {
+        if ($this->currentType !== Mapbox::UPLOAD) {
             throw new RunTimeException('Credentials only work with Uploads');
         }
 
-        $response = Zttp::get($this->getUrl($this->currentType, null, ['credentials']));
+        $response = Http::get($this->getUrl($this->currentType, null, ['credentials']));
 
         return new S3Credentials($response->json());
     }
